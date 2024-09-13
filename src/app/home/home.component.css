@@ -1,0 +1,16 @@
+/* Asegúrate de que el contenedor tiene suficiente espacio */
+.container {
+    padding: 16px;
+  }
+  
+  /* Asegúrate de que la tabla ocupa el espacio disponible */
+  table.mat-table {
+    width: 100%;
+  }
+  
+  /* Asegúrate de que la tabla y el formulario no se superpongan */
+  mat-form-field {
+    display: block;
+    margin-bottom: 16px;
+  }
+  

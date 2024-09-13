@@ -1,0 +1,120 @@
+<h1>form de Contacto</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- Nombre -->
+    <label for="first_name">Nombre:</label>
+    <input id="first_name" formControlName="first_name" />
+    <div *ngIf="form.get('first_name')?.invalid && form.get('first_name')?.touched">
+        <small>El nombre es requerido</small>
+    </div>
+
+    <!-- Apellido -->
+    <label for="last_name">Apellido:</label>
+    <input id="last_name" formControlName="last_name" />
+    <div *ngIf="form.get('last_name')?.invalid && form.get('last_name')?.touched">
+        <small>El apellido es requerido</small>
+    </div>
+
+    <!-- Teléfonos -->
+    <label>Teléfonos:</label>
+    <div formArrayName="phones">
+        <div *ngFor="let phone of phones.controls; let i = index">
+            <input [formControlName]="i" placeholder="Teléfono" />
+        </div>
+    </div>
+    <button type="button" (click)="addPhone()">Agregar Teléfono</button>
+
+    <!-- Correos -->
+    <label>Correos:</label>
+    <div formArrayName="emails">
+        <div *ngFor="let email of emails.controls; let i = index">
+            <input [formControlName]="i" placeholder="Correo" />
+        </div>
+    </div>
+    <button type="button" (click)="addEmail()">Agregar Correo</button>
+
+    <!-- Direcciones -->
+    <label>Direcciones:</label>
+    <div formArrayName="addresses">
+        <div *ngFor="let address of addresses.controls; let i = index" [formGroupName]="i">
+            <label for="street-{{i}}">Calle:</label>
+            <input id="street-{{i}}" formControlName="street" placeholder="Calle" />
+
+            <label for="city-{{i}}">Ciudad:</label>
+            <input id="city-{{i}}" formControlName="city" placeholder="Ciudad" />
+
+            <label for="state-{{i}}">Estado:</label>
+            <input id="state-{{i}}" formControlName="state" placeholder="Estado" />
+
+            <label for="postal_code-{{i}}">Código Postal:</label>
+            <input id="postal_code-{{i}}" formControlName="postal_code" placeholder="Código Postal" />
+        </div>
+    </div>
+    <button type="button" (click)="addAddress()">Agregar Dirección</button>
+
+    <!-- Botón para enviar -->
+    <button type="submit">Enviar</button>
+
+</form>
+
+<table mat-table [dataSource]="data" class="mat-elevation-z8">
+    <!-- Nombre Column -->
+    <ng-container matColumnDef="first_name">
+        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+        <td mat-cell *matCellDef="let element"> {{ element.first_name }} </td>
+    </ng-container>
+
+    <!-- Apellido Column -->
+    <ng-container matColumnDef="last_name">
+        <th mat-header-cell *matHeaderCellDef> Apellido </th>
+        <td mat-cell *matCellDef="let element"> {{ element.last_name }} </td>
+    </ng-container>
+
+    <!-- Teléfonos Column -->
+    <ng-container matColumnDef="phones">
+        <th mat-header-cell *matHeaderCellDef> Teléfonos </th>
+        <td mat-cell *matCellDef="let element">
+            <div *ngFor="let num of element.phones">
+                {{ num.phone_number }},
+            </div>
+        </td>
+    </ng-container>
+
+    <!-- Correos Column -->
+    <ng-container matColumnDef="emails">
+        <th mat-header-cell *matHeaderCellDef> Correos </th>
+        <td mat-cell *matCellDef="let element">
+            <div *ngFor="let email of element.emails">
+                {{ email.email_address }},
+            </div>
+        </td>
+    </ng-container>
+
+    <!-- Direcciones Column -->
+    <ng-container matColumnDef="addresses">
+        <th mat-header-cell *matHeaderCellDef> Direcciones </th>
+        <td mat-cell *matCellDef="let element">
+            <div *ngFor="let address of element.addresses">
+                {{ address.street }}, {{ address.city }}, {{ address.state }}, {{ address.postal_code }}
+            </div>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let element">
+            <button mat-button (click)="handleAction('edit', element)">Editar</button>
+            <button mat-button color="warn" (click)="handleAction('delete', element)">Eliminar</button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<!-- Mostrar el objeto JSON si el form es enviado
+<div *ngIf="form.valid">
+  <h2>Datos enviados:</h2>
+  <pre>{{ form.value | json }}</pre>
+</div> -->
